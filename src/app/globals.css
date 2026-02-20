@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import "tailwindcss";
+
+@theme inline {
+  --color-brutal-black: #000000;
+  --color-brutal-white: #FFFDF7;
+  --color-brutal-yellow: #FFD700;
+  --color-brutal-pink: #FF6B9D;
+  --color-brutal-blue: #4ECDC4;
+  --color-brutal-red: #FF4444;
+  --color-brutal-purple: #A855F7;
+  --color-brutal-orange: #FF8C42;
+
+  --shadow-brutal: 4px 4px 0 0 #000;
+  --shadow-brutal-lg: 6px 6px 0 0 #000;
+  --shadow-brutal-sm: 2px 2px 0 0 #000;
+
+  --font-mono: 'Space Mono', monospace;
+}
+
+* {
+  border-color: var(--color-brutal-black);
+}
+
+body {
+  background: var(--color-brutal-white);
+  color: var(--color-brutal-black);
+  font-family: 'Space Mono', monospace;
+}
+
+.brutal-card {
+  border: 3px solid var(--color-brutal-black);
+  box-shadow: 4px 4px 0 0 var(--color-brutal-black);
+  background: white;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.brutal-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 0 var(--color-brutal-black);
+}
+
+.brutal-button {
+  border: 3px solid var(--color-brutal-black);
+  box-shadow: 4px 4px 0 0 var(--color-brutal-black);
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.brutal-button:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 0 var(--color-brutal-black);
+}
+
+.brutal-button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0 0 var(--color-brutal-black);
+}
+
+.brutal-pill {
+  border: 3px solid var(--color-brutal-black);
+  box-shadow: 2px 2px 0 0 var(--color-brutal-black);
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.05s, box-shadow 0.05s;
+}
+
+.brutal-pill:active,
+.brutal-pill.active {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0 0 var(--color-brutal-black);
+}
