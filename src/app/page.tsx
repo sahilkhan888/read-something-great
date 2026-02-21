@@ -1,23 +1,8 @@
-import { createClient } from "@/lib/supabase/server";
 import { fetchTopHeadlines } from "@/lib/gnews";
-import { Bookmark } from "@/lib/types";
 import ArticleFeed from "@/components/ArticleFeed";
 
 export default async function Home() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
   const gnewsData = await fetchTopHeadlines("general", 10);
-
-  let bookmarks: Bookmark[] = [];
-  if (user) {
-    const { data } = await supabase
-      .from("bookmarks")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false });
-    bookmarks = data || [];
-  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -33,11 +18,7 @@ export default async function Home() {
         </p>
       </div>
 
-      <ArticleFeed
-        initialArticles={gnewsData.articles}
-        initialBookmarks={bookmarks}
-        isLoggedIn={!!user}
-      />
+      <ArticleFeed initialArticles={gnewsData.articles} />
     </div>
   );
 }

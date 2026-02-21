@@ -3,6 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
   const supabase = await createClient();
+  if (!supabase) {
+    return NextResponse.json({ error: "Supabase not configured" }, { status: 503 });
+  }
+
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -24,6 +28,10 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient();
+  if (!supabase) {
+    return NextResponse.json({ error: "Supabase not configured" }, { status: 503 });
+  }
+
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -55,6 +63,10 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   const supabase = await createClient();
+  if (!supabase) {
+    return NextResponse.json({ error: "Supabase not configured" }, { status: 503 });
+  }
+
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {

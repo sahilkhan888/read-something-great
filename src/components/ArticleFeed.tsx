@@ -1,15 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Article, Bookmark, Topic } from "@/lib/types";
+import { Article, Topic } from "@/lib/types";
 import TopicSelector from "./TopicSelector";
 import ArticleCard from "./ArticleCard";
 import LoadingCard from "./LoadingCard";
 
 interface ArticleFeedProps {
   initialArticles: Article[];
-  initialBookmarks: Bookmark[];
-  isLoggedIn: boolean;
 }
 
 function shuffleArray<T>(array: T[]): T[] {
@@ -21,19 +19,12 @@ function shuffleArray<T>(array: T[]): T[] {
   return shuffled;
 }
 
-export default function ArticleFeed({
-  initialArticles,
-  initialBookmarks,
-  isLoggedIn,
-}: ArticleFeedProps) {
+export default function ArticleFeed({ initialArticles }: ArticleFeedProps) {
   const [topic, setTopic] = useState<Topic>("general");
   const [articles, setArticles] = useState<Article[]>(
     shuffleArray(initialArticles)
   );
-  const [bookmarks, setBookmarks] = useState<Bookmark[]>(initialBookmarks);
   const [loading, setLoading] = useState(false);
-
-  const bookmarkedUrls = new Set(bookmarks.map((b) => b.article_url));
 
   useEffect(() => {
     // Skip initial load since we have server-fetched data
@@ -63,63 +54,6 @@ export default function ArticleFeed({
     }
   };
 
-  const toggleBookmark = async (article: Article) => {
-    if (!isLoggedIn) return;
-
-    const isCurrentlyBookmarked = bookmarkedUrls.has(article.url);
-
-    if (isCurrentlyBookmarked) {
-      // Optimistic remove
-      setBookmarks((prev) =>
-        prev.filter((b) => b.article_url !== article.url)
-      );
-      try {
-        await fetch(
-          `/api/bookmarks?article_url=${encodeURIComponent(article.url)}`,
-          { method: "DELETE" }
-        );
-      } catch {
-        // Revert on error
-        const res = await fetch("/api/bookmarks");
-        const data = await res.json();
-        setBookmarks(data);
-      }
-    } else {
-      // Optimistic add
-      const tempBookmark: Bookmark = {
-        id: crypto.randomUUID(),
-        user_id: "",
-        article_url: article.url,
-        article_title: article.title,
-        article_description: article.description,
-        article_image: article.image,
-        article_source: article.source.name,
-        article_published_at: article.publishedAt,
-        created_at: new Date().toISOString(),
-      };
-      setBookmarks((prev) => [tempBookmark, ...prev]);
-      try {
-        await fetch("/api/bookmarks", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            article_url: article.url,
-            article_title: article.title,
-            article_description: article.description,
-            article_image: article.image,
-            article_source: article.source.name,
-            article_published_at: article.publishedAt,
-          }),
-        });
-      } catch {
-        // Revert on error
-        setBookmarks((prev) =>
-          prev.filter((b) => b.id !== tempBookmark.id)
-        );
-      }
-    }
-  };
-
   return (
     <div>
       <div className="mb-8">
@@ -142,13 +76,7 @@ export default function ArticleFeed({
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {articles.map((article) => (
-            <ArticleCard
-              key={article.url}
-              article={article}
-              isBookmarked={bookmarkedUrls.has(article.url)}
-              isLoggedIn={isLoggedIn}
-              onToggleBookmark={() => toggleBookmark(article)}
-            />
+            <ArticleCard key={article.url} article={article} />
           ))}
         </div>
       )}

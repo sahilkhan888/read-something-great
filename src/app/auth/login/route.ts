@@ -7,6 +7,10 @@ export async function GET(request: Request) {
 
   const supabase = await createClient();
 
+  if (!supabase) {
+    return NextResponse.redirect(`${origin}/?error=supabase_not_configured`);
+  }
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {

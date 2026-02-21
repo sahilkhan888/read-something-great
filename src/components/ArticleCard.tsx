@@ -1,21 +1,12 @@
 "use client";
 
 import { Article } from "@/lib/types";
-import BookmarkButton from "./BookmarkButton";
 
 interface ArticleCardProps {
   article: Article;
-  isBookmarked: boolean;
-  isLoggedIn: boolean;
-  onToggleBookmark: () => void;
 }
 
-export default function ArticleCard({
-  article,
-  isBookmarked,
-  isLoggedIn,
-  onToggleBookmark,
-}: ArticleCardProps) {
+export default function ArticleCard({ article }: ArticleCardProps) {
   return (
     <div className="brutal-card p-0 overflow-hidden flex flex-col">
       {article.image && (
@@ -42,7 +33,7 @@ export default function ArticleCard({
         <p className="text-sm opacity-70 mb-4 flex-1 line-clamp-3">
           {article.description}
         </p>
-        <div className="flex items-center justify-between gap-2 mt-auto">
+        <div className="mt-auto">
           <a
             href={article.url}
             target="_blank"
@@ -51,11 +42,6 @@ export default function ArticleCard({
           >
             Read →
           </a>
-          <BookmarkButton
-            isBookmarked={isBookmarked}
-            isLoggedIn={isLoggedIn}
-            onToggle={onToggleBookmark}
-          />
         </div>
       </div>
     </div>

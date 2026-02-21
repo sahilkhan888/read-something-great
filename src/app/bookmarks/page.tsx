@@ -5,9 +5,11 @@ import RemoveBookmarkButton from "@/components/RemoveBookmarkButton";
 
 export default async function BookmarksPage() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = supabase
+    ? (await supabase.auth.getUser()).data.user
+    : null;
 
-  if (!user) {
+  if (!user || !supabase) {
     redirect("/");
   }
 
